@@ -237,8 +237,11 @@ class PostsController < ApplicationController
     @date = @post.created_at
     get_statuses
     @review = @post.reviews.last
+    if (@review.nil?)
+      @review = @post.reviews.build(status: "In Progress")
+    end
     @reviews = @post.reviews.where(status: ["Rejected", "Approved for Publishing", "Recommend for Publishing", "Request Re-Review"])
-    @most_recent_review = @post.reviews.last
+    @most_recent_review = @post.most_recent_review
     @editor = User.find_by(id: @review.editor_id)
     @requested_review = @post.reviews.where(status: "Request Re-Review").last
     @requested_review_user = User.find_by(id: @requested_review&.editor_id)
@@ -400,7 +403,7 @@ class PostsController < ApplicationController
   end
 
   def edit
-    if @post.is_locked?
+    if @post.is_locked? && !current_user.is_manager?
       redirect_to @post, notice: "You can no longer work on this article."
       return
     end
@@ -413,13 +416,11 @@ class PostsController < ApplicationController
         (@post.most_recent_review.editor_id.eql? current_user.id)
     @categories = Category.active.or(Category.where(id: @post.category_id))
     @most_recent_review = @post.reviews.last
-    #create a new review if the last review is either nil or rejected
-    if (@post.most_recent_review.nil?) || (["Rejected", "Recommend for Publishing", "Request Re-Review", "Approved for Publishing"].include? @post.most_recent_review.try(:status))
-      if (current_user.editor?)
-        @review = @post.reviews.build(editor_id: current_user.id, status: @post.most_recent_review.status)
-      else
-        @review = @post.reviews.new(status: "In Progress")
-      end
+    #create a new review if the last review is either nil or rejected or approved for publishing
+    if (@post.most_recent_review.nil?)
+      @review = @post.reviews.new(status: "In Progress")
+    elsif current_user.editor? && (["Rejected", "Recommend for Publishing", "Request Re-Review"].include? @post.most_recent_review.status)
+      @review = @post.reviews.build(editor_id: current_user.id, status: @post.most_recent_review.status)
     #create a new review for an already published article that is updated by a different editor
     elsif (@post.most_recent_review.try(:status).eql? "Approved for Publishing") &&
           !(@post.most_recent_review.try(:editor_id).eql? current_user.id) &&

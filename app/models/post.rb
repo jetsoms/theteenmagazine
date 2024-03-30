@@ -23,6 +23,7 @@ class Post < ApplicationRecord
       <<-SQL
         INNER JOIN reviews ON posts.id = reviews.post_id
         AND reviews.status = 'In Progress'
+        AND NOT posts.title LIKE '% (locked)'
         AND reviews.created_at = (
           SELECT MAX(created_at) 
           FROM reviews 
@@ -105,6 +106,8 @@ class Post < ApplicationRecord
       SQL
     )
   }
+
+  scope :locked, -> { where("title LIKE '%(locked)'") }
   
   scope :is_reviewing, -> (user_id) {
     joins(

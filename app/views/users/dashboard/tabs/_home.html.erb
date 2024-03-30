@@ -78,7 +78,7 @@
   <% else %>
     <div class="btn_cntnr mt-1 pl-0 pr-0 pt-2 pb-2 mr-4 mb-4"
       <% if @show_onboarding_full %>
-        role="button" data-step data-index="6" data-onboarding-content="Claim another pitch or pitch your own article topic. Make sure it meets all the criteria in Pitching an Article before submitting."
+        role="button" data-step data-index="5" data-onboarding-content="Claim another pitch or pitch your own article topic. Make sure it meets all the criteria in Pitching an Article before submitting."
       <% end %>
     >
       <span><%= link_to "Pitch an Article", new_pitch_path, class: "newpost--new--profile mr-0" %></span>
@@ -104,6 +104,10 @@
     <% end %>
     <h6 class="header_ttl">Articles In Progress</h6>
     <%= render "/users/partials/dashboard_articles", articles: @user_posts.draft, image: "saved.png" %>
+    <% if @user_posts.locked.present? %>
+      <h6 class="header_ttl">Locked Articles (admin only)</h6>
+      <%= render "/users/partials/dashboard_articles", articles: @user_posts.locked, image: "saved.png" %>
+    <% end %>
   </div>
   <br>
 </div>
