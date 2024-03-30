@@ -59,6 +59,10 @@
           <% end %>
           <h6 class="header_ttl">Articles In Progress</h6>
           <%= render "/users/partials/dashboard_articles", articles: @user_posts.draft, image: "saved.png" %>
+          <% if @user_posts.locked.present? %>
+            <h6 class="header_ttl">Locked Articles (admin only)</h6>
+            <%= render "/users/partials/dashboard_articles", articles: @user_posts.locked, image: "saved.png" %>
+          <% end %>
         </div>
         <div class="btn_cntnr mt-1 pl-0 pr-0 pt-2 pb-2 mr-4 mb-4" role="button" data-step data-index="2" data-onboarding-content="If you have your own idea for an article, you can pitch it to our editor team here.">
           <%= link_to "Pitch an Article", new_pitch_path, class: "newpost--new--profile mr-0" %>

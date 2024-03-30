@@ -16,7 +16,7 @@
             by <%= link_to post.user.full_name, post.user %>
           <% end %>
         </p>
-        <% if post.pitch.try(:claimed_id).present? && post.try(:deadline_at).present? && (post.most_recent_review.status.eql? "In Progress") && !current_user.partner %>
+        <% if post.pitch.try(:claimed_id).present? && post.try(:deadline_at).present? && (post.most_recent_review&.status.eql? "In Progress") && !current_user.partner %>
           <% @class = post.deadline_at < Date.today + 4.days ? "text-danger" : "" %>
           <p class="<%= @class %>">
             <% if (current_user.id.eql? post.user.id) %>
