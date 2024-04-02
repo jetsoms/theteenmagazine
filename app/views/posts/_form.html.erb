@@ -108,7 +108,7 @@
       <p class="mt-3"><span class="highlight">This article is <b>*time sensitive*</b> and must be published by <b><%= format_full_date(@post.pitch&.must_publish_by_date) %></b>.</span></p>
     <% end %>
     <%= f.fields_for :reviews, @review do |rv| %>
-      <% if @post.pitch&.must_publish_by_date.present? && @post.pitch&.must_publish_by_date < Time.now - 1 %>
+      <% if !(@post.is_published?) && @post.pitch&.must_publish_by_date.present? && @post.pitch&.must_publish_by_date < Time.now - 1 %>
         <p class="mt-3"><span class="highlight">This article is past its deadline of <b><%= format_full_date(@post.pitch&.must_publish_by_date) %></b> and can no longer be submitted.</span></p>
         <% if current_user.is_manager? %>
           <%= rv.select :status, options_for_select(@statuses || ["In Progress"], @review.try(:status)) %>
