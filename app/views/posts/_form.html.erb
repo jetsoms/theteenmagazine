@@ -104,7 +104,7 @@
     <% end %>
     <%# <p class="mt-0">If you are writing an article with other writer(s), you may put their emails here to share the article with them. Separate multiple emails with commas.</p>
     <%= f.text_field :collaboration, placeholder: '(Optional) Email' %>
-    <% if @post.pitch&.must_publish_by_date.present? && @post.pitch&.must_publish_by_date > Time.now - 1 %>
+    <% if !(@post.is_published?) && @post.pitch&.must_publish_by_date.present? && @post.pitch&.must_publish_by_date > Time.now - 1 %>
       <p class="mt-3"><span class="highlight">This article is <b>*time sensitive*</b> and must be published by <b><%= format_full_date(@post.pitch&.must_publish_by_date) %></b>.</span></p>
     <% end %>
     <%= f.fields_for :reviews, @review do |rv| %>
