@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_03_215018) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_02_035624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -301,6 +301,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_03_215018) do
     t.string "thumbnail_url"
     t.boolean "is_interview", default: false
     t.integer "assign_to_user_id"
+    t.datetime "must_publish_by_date", precision: nil
     t.index ["slug"], name: "index_pitches_on_slug", unique: true
     t.index ["updated_at"], name: "index_pitches_on_updated_at"
   end

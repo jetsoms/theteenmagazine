@@ -4,9 +4,14 @@
       <%= image_tag image, class: "icon" %>
       <div>
         <h6 id="post-title"><a href="#"><%= link_to post.title, post%></a>
-          <% if current_user.is_manager? && post.pitch.present? && (post.pitch.priority.eql? "High") %>
+          <% if post.pitch.present? && (post.pitch.priority.eql? "High") %>
             <span class="badge badge-pill badge-danger">
               High Priority
+            </span>
+          <% end %>
+          <% if post.pitch.present? && post.pitch.must_publish_by_date.present? %>
+            <span class="badge badge-pill badge-danger">
+              Time Sensitive
             </span>
           <% end %>
         </h6>

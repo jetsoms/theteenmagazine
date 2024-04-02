@@ -53,6 +53,7 @@ module PitchesHelper
       .not_claimed
       .where(status: nil)
       .where("updated_at > ?", Time.now - 90.days)
+      .where("must_publish_by_date > ? OR must_publish_by_date is NULL", Time.now)
       .where(is_interview: false)
       .order("updated_at desc")
     pitches_helper(@pitches)

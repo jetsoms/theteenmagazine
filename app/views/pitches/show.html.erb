@@ -51,6 +51,11 @@
       High Priority
     </span>
   <% end %>
+  <% if @pitch.must_publish_by_date.present? %>
+    <span class="badge badge-pill badge-danger">
+      Time Sensitive
+    </span>
+  <% end %>
   <% if @pitch.platform_to_share.present? && !(@pitch.platform_to_share.eql? "None selected") %>
     <span class="badge badge-pill badge-success">Will share on social media</span>
     <span class="badge badge-pill badge-info"><%= @pitch.platform_to_share&.chomp('(preferred)')%></span>
@@ -85,8 +90,10 @@
     <i>Notes:</i>
     <%= markdown @pitch.requirements %>
   <% end %>
-  <% if @pitch.deadline.present? %>
-    <p class="pitch_usr mt-3"><b>This pitch has a <%= @pitch.deadline %> week deadline. Read more about deadlines <a href="/pages/writing-an-article#deadlines-and-extensions">here</a>.</b></p>
+  <% if @pitch.must_publish_by_date.present? %>
+    <p class="mt-3"><span class="highlight">This pitch is <b>*time sensitive*</b> and it must be published by <b><%= format_full_date(@pitch.must_publish_by_date) %></b>.</span></p>
+  <% elsif @pitch.deadline.present? %>
+    <p class="mt-3"><b>This pitch has a <%= @pitch.deadline %> week deadline. Read more about deadlines <a href="/pages/writing-an-article#deadlines-and-extensions">here</a>.</b></p>
   <% end %>
   <% if @claimed_user.nil? %>
     <%= form_for @post do |f| %>
@@ -116,10 +123,16 @@
           </div>
         <% end %>
       <% end %>
+      <% if @pitch.must_publish_by_date.present? && @pitch.must_publish_by_date < Time.now %>
+        <div>
+          <p>This pitch is past the must publish by date and can no longer be claimed.</p>
+        </div>
+      <% else %>
       <div class="btn_cntnr">
         <% @confirm = @pitch.deadline.nil? ? "When you claim this pitch, your draft will be started." : "When you claim this pitch, you will have #{@pitch.deadline} weeks to submit the associated draft for review." %>
         <span data-toggle="tooltip" title="<%= @tooltip %>"><%= f.submit @title, data: { confirm: @confirm }, class: "newpost--new--profile mb-0 mr-0 #{@disabled}", style: "padding-left: 2.5em; padding-right: 2.5em;" %></span>
       </div>
+      <% end %>
       <br>
     <% end %>
   <% else %>

@@ -27,7 +27,7 @@
     <%= f.check_box :marketer %>
   <% end %>
 
-  <% if current_user && current_user.admin? %>
+  <% if current_user && current_user.is_manager? %>
     <%= f.label "Editor", :class => "ml-2" %>
     <%= f.check_box :editor %>
   <% end %>

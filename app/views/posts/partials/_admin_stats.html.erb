@@ -7,5 +7,10 @@
         High Priority
       </span>
     <% end %>
+    <% if post.pitch.present? && post.pitch.must_publish_by_date.present? %>
+      <span class="badge badge-pill badge-danger">
+        Time Sensitive
+      </span>
+    <% end %>
   </p>
 <% end %>

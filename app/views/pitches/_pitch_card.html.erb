@@ -18,6 +18,11 @@
         High Priority
       </span>
     <% end %>
+    <% if pitch.must_publish_by_date.present? %>
+      <span class="badge badge-pill badge-danger">
+        Time Sensitive
+      </span>
+    <% end %>
     <span class="card-text"> <%= pitch.category.name %>,</span>
     <span class="card-text"> Pitched on <%= pitch.created_at.strftime("%m-%d-%Y") %></span>
     <%= link_to @button_text, pitch, :class => "btn btn-primary", :id => "btn_dark" %>
