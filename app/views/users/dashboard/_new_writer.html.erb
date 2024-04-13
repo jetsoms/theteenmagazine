@@ -59,7 +59,7 @@
           <% end %>
           <h6 class="header_ttl">Articles In Progress</h6>
           <%= render "/users/partials/dashboard_articles", articles: @user_posts.draft, image: "saved.png" %>
-          <% if @user_posts.locked.present? %>
+          <% if current_user.is_manager? && @user_posts.locked.present? %>
             <h6 class="header_ttl">Locked Articles (admin only)</h6>
             <%= render "/users/partials/dashboard_articles", articles: @user_posts.locked, image: "saved.png" %>
           <% end %>
