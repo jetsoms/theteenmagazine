@@ -13,12 +13,10 @@ class Apply < ActiveRecord::Base
 
   has_one_attached :resume
   validates :resume,
-          content_type: :pdf,
           size: { less_than: 5.megabytes, message: 'Attachment must be less than 1 MB' }
 
   has_one_attached :sample_writing
   validates :sample_writing,
-        content_type: :pdf,
         size: { less_than: 5.megabytes, message: 'Attachment must be less than 1 MB' }
 
   def validate
