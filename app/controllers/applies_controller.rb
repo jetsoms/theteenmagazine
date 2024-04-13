@@ -12,10 +12,10 @@ class AppliesController < ApplicationController
         pagy(
           Apply
             ## no user and not rejected
-            .left_outer_joins(:user)
+            .joins("LEFT OUTER JOIN users ON (users.id = applies.user_id OR users.email = applies.email)") # Added closing parenthesis
             .where(rejected_writer_at: nil, rejected_editor_at: nil).where(users: { id: nil })
             ## user is not editor and application is of type editor and has not been rejected
-            .or(Apply.left_outer_joins(:user).where(kind: "Editor", rejected_writer_at: nil, rejected_editor_at: nil).where(users: { editor: [nil, false] }))
+            .or(Apply.joins("LEFT OUTER JOIN users ON (users.id = applies.user_id OR users.email = applies.email)").where(kind: "Editor", rejected_writer_at: nil, rejected_editor_at: nil).where(users: { editor: [nil, false] }))
             .order('applies.updated_at desc'),
           page: params[:page],
           items: 20
