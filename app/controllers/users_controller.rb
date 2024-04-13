@@ -630,7 +630,7 @@ class UsersController < ApplicationController
               .where.not(deadline_at: nil, pitch_id: nil),
             page: params[:page],
             items: 15,
-          ).order("updated_at desc")
+          )
       else
         @pagy, @posts =
           pagy(

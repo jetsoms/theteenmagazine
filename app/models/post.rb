@@ -158,6 +158,7 @@ class Post < ApplicationRecord
         -> {
           joins(:pitch).where(pitch: { priority: "High" })
         }
+
   scope :has_been_submitted,
         -> {
           joins(:reviews).where(

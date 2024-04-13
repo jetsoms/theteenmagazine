@@ -27,7 +27,7 @@
             <% if (current_user.id.eql? post.user.id) %>
               <% if post.deadline_at > Time.now %>
                 You have <%= distance_of_time_in_words(Time.now, post.deadline_at) %> left to submit this article for review
-                <% if @class.present? %> or <a href="/writers/<%= post.user.slug %>/extensions" class="alert-link">use an extension</a>.<% end %>
+                <% if @class.present? && post.pitch.present? && post.pitch.must_publish_by_date.nil? %> or <a href="/writers/<%= post.user.slug %>/extensions" class="alert-link">use an extension</a>.<% end %>
               <% else %>
                 You have passed the deadline. This article's pitch will be automatically unclaimed.
               <% end %>

@@ -195,7 +195,12 @@ class PitchesController < ApplicationController
     @post.pitch.update_columns(
       { claimed_id: current_user.id, claimed_at: Time.now }
     )
-    if @post.pitch.deadline.present?
+    if @post.pitch.must_publish_by_date.present?
+      @post.update_column(
+        "deadline_at",
+        @post.pitch.must_publish_by_date
+      )
+    elsif @post.pitch.deadline.present?
       @post.update_column(
         "deadline_at",
         Time.now + (@post.pitch.deadline).weeks
