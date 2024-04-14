@@ -5,14 +5,14 @@
         <div class="container">
           <div class="skinny_wrapper flex_horizontal search_wrapper">
             <%= form_tag(search_path, method: :get, id: "search-form", class: "mb-0 form-inline d-flex justify-content-left md-form form-sm active-theme-2 mt-2") do %>
-              <%= text_field_tag :query, params[:query], class: "form-control form-control-sm mr-3", id: "search-input", placeholder: "Search in #{@filter.titleize}..." %>
+              <%= text_field_tag :query, params[:query], class: "form-control form-control-sm mr-3", id: "search-page-input", placeholder: "Search in #{@filter.titleize}..." %>
               <%= hidden_field_tag :filter, @filter %>
               <%= button_tag type: "submit", class: "btn-ttm mb-2", id: "search-button" do %>
                 Search
               <% end %>
             <% end %>
           </div>
-          <div id="autocomplete-container"></div>
+          <div id="autocomplete-search-page-container"></div>
           <div class="m-1">
             <% if @query.present? %>
               <h2>Searching for... <span style="background-color: yellow"><%= @query %></span></h2>
@@ -67,7 +67,7 @@
 
 <script>
 $(document).ready(function() {
-  $('#search-input').on('keyup', function() {
+  $('#search-page-input').on('keyup', function() {
     var query = $(this).val();
     if (query.length >= 3) { // You can adjust the minimum length of characters before making a request
       $.ajax({
@@ -76,7 +76,7 @@ $(document).ready(function() {
         data: { query: query },
         success: function(response) {
           var suggestions = response.suggestions;
-          var autocompleteContainer = $('#autocomplete-container');
+          var autocompleteContainer = $('#autocomplete-search-page-container');
           autocompleteContainer.empty();
           if (suggestions.length > 0) {
             suggestions.forEach(function(suggestion) {
@@ -89,21 +89,21 @@ $(document).ready(function() {
         }
       });
     } else {
-      $('#autocomplete-container').hide();
+      $('#autocomplete-search-page-container').hide();
     }
   });
 
   // Handle click on autocomplete suggestion
   $(document).on('click', '.autocomplete-item', function() {
     var suggestion = $(this).text();
-    $('#search-input').val(suggestion);
+    $('#search-page-input').val(suggestion);
     $('#search-form').submit();
   });
 
   // Hide autocomplete container when clicking outside of it
   $(document).on('click', function(e) {
-    if (!$(e.target).closest('#autocomplete-container').length && !$(e.target).is('#search-input')) {
-      $('#autocomplete-container').hide();
+    if (!$(e.target).closest('#autocomplete-search-page-container').length && !$(e.target).is('#search-page-input')) {
+      $('#autocomplete-search-page-container').hide();
     }
   });
 });
