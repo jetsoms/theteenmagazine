@@ -143,6 +143,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def autocomplete
+    query = params[:query]
+    # Fetch autocomplete suggestions based on the query
+    @suggestions = User.where(partner: [false, nil]).is_published.where('full_name ILIKE ?', "%#{query}%").order("full_name asc").limit(6) # Adjust this query as per your needs
+    render json: { suggestions: @suggestions.map { |user| { title: user.full_name } } }
+  end
+
   def new_writer
     @has_completed_onboarding = !@user.submitted_profile.nil?
     @has_submitted_profile = !@user.submitted_profile.nil?

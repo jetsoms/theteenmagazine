@@ -51,6 +51,13 @@ class PostsController < ApplicationController
     end
   end
 
+  def autocomplete
+    query = params[:query]
+    # Fetch autocomplete suggestions based on the query
+    @suggestions = Post.published.where('title ILIKE ?', "%#{query}%").by_published_date.limit(6) # Adjust this query as per your needs
+    render json: { suggestions: @suggestions.map { |post| { title: post.title } } }
+  end
+
   def index
     set_meta_tags title: "Community | The Teen Magazine"
     @user = current_user

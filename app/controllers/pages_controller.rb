@@ -248,16 +248,16 @@ class PagesController < ApplicationController
   end
 
   def search
-    if params[:search].present?
-      @query = params[:search][:query]
-      @filter = params[:search][:filter]
+    if params[:query].present?
+      @query = params[:query]
+      @filter = params[:filter]
       if @filter.eql? "writers"
         @pagy, @users =
           pagy(
             User
               .where(partner: [false, nil])
               .is_published
-              .where("lower(full_name) LIKE ?", "%#{@query.downcase}%")
+              .where("lower(full_name) ILIKE ?", "%#{@query.downcase}%")
               .order("full_name asc"),
             page: params[:page],
             items: 15,
@@ -295,7 +295,7 @@ class PagesController < ApplicationController
             )
         end
       else
-        @filter = "all articles"
+        @filter = "posts"
         @pagy, @posts =
           pagy(Post.published.by_published_date, page: params[:page], items: 15)
       end

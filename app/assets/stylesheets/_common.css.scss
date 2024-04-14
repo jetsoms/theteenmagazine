@@ -6,6 +6,20 @@
   pointer-events: all !important;
 }
 
+.btn-ttm {
+  color: white !important;
+  background-color: #2a2a2a;
+  border: 1px solid #2a2a2a !important;
+  padding: 10px 25px;
+  white-space: nowrap;
+  text-decoration: none !important;
+  font-family: "Playfair Display";
+  line-height: 1.5;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .success-text {
   color: limegreen !important;
 }
@@ -1022,6 +1036,7 @@ hr {
     border-top: none;
     border-right: none;
     border-radius: 0px;
+    min-width: 400px;
   }
 }
 

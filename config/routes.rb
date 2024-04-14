@@ -129,6 +129,9 @@ Rails.application.routes.draw do
   post "/september-2021-bexesyjj-bxducjpuj-hrhhqug-xqkoktbve", to: "pages#issue"
   post "/posts/:id/subscribe", to: "posts#subscribe"
 
+  get '/autocomplete/posts', to: 'posts#autocomplete'
+  get '/autocomplete/writers', to: 'users#autocomplete'
+
   patch "users/:id/:post_id/modal" => "users#post_modal", :as => :post_modal
   patch "users/:id/:post_id/promote" => "users#promote_post",
         :as => :promote_post

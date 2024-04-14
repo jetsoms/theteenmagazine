@@ -3,21 +3,22 @@
     <div class="other--articles">
       <div class="flex">
         <div class="container">
-          <div class="flex_horizontal search_wrapper">
-            <%= form_for(:search, method: :get, :html => {:class => 'form-inline d-flex justify-content-left md-form form-sm active-theme-2 mt-2'}) do |f| %>
-              <%= f.text_field :query, class: "form-control form-control-sm mr-3", style: "flex: 1;", placeholder: "Searching in #{@filter.titleize}" %>
-              <%= f.hidden_field :filter, value: @filter %>
-            <% end %>
-            <%= form_for(:search, method: :get, :html => {:class => 'form-inline d-flex  justify-content-left md-form form-sm active-theme-2 mt-2', style: "flex: 1;"}) do |f| %>
-              <%= button_tag(class: "btn_no_style", name: "filter", value: @next) do %>
-                <svg width="40px" height="40px" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" class="svg-inline--fa fa-angle-right fa-w-8 mb-2" role="img" viewBox="0 0 256 512"><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg>
+          <div class="skinny_wrapper flex_horizontal search_wrapper">
+            <%= form_tag(search_path, method: :get, id: "search-form", class: "mb-0 form-inline d-flex justify-content-left md-form form-sm active-theme-2 mt-2") do %>
+              <%= text_field_tag :query, params[:query], class: "form-control form-control-sm mr-3", id: "search-input", placeholder: "Search in #{@filter.titleize}..." %>
+              <%= hidden_field_tag :filter, @filter %>
+              <%= button_tag type: "submit", class: "btn-ttm mb-2", id: "search-button" do %>
+                Search
               <% end %>
             <% end %>
           </div>
-          <% if @query.present? %>
-            <h2>Searching for... <span style="background-color: yellow"><%= @query %></span></h2>
-            <br>
-          <% end %>
+          <div id="autocomplete-container"></div>
+          <div class="skinny_wrapper">
+            <% if @query.present? %>
+              <h2>Searching for... <span style="background-color: yellow"><%= @query %></span></h2>
+              <br>
+            <% end %>
+          </div>
           <% if @posts.present? %>
             <% @posts.each do |post| %>
               <div class="thumbnail d-flex">
@@ -63,3 +64,47 @@
     </div>
   </div>
 </div>
+
+<script>
+$(document).ready(function() {
+  $('#search-input').on('keyup', function() {
+    var query = $(this).val();
+    if (query.length >= 3) { // You can adjust the minimum length of characters before making a request
+      $.ajax({
+        url: '/autocomplete/<%= @filter %>',
+        method: 'GET',
+        data: { query: query },
+        success: function(response) {
+          var suggestions = response.suggestions;
+          var autocompleteContainer = $('#autocomplete-container');
+          autocompleteContainer.empty();
+          if (suggestions.length > 0) {
+            suggestions.forEach(function(suggestion) {
+              autocompleteContainer.append('<div class="autocomplete-item">' + suggestion.title + '</div>');
+            });
+            autocompleteContainer.show();
+          } else {
+            autocompleteContainer.hide();
+          }
+        }
+      });
+    } else {
+      $('#autocomplete-container').hide();
+    }
+  });
+
+  // Handle click on autocomplete suggestion
+  $(document).on('click', '.autocomplete-item', function() {
+    var suggestion = $(this).text();
+    $('#search-input').val(suggestion);
+    $('#search-form').submit();
+  });
+
+  // Hide autocomplete container when clicking outside of it
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('#autocomplete-container').length && !$(e.target).is('#search-input')) {
+      $('#autocomplete-container').hide();
+    }
+  });
+});
+</script>
