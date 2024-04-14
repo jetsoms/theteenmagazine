@@ -54,6 +54,7 @@
     <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
   </head>
   <body <% if @post.present? && !@post.is_published? %> class='no-ads'<% end %>>
+    <%= render "modals/search" %>
     <div id="site-wrapper">
       <%= render "layouts/partials/slide-in-menu" %>
       <%= render "layouts/partials/header-mobile" %>

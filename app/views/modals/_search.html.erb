@@ -1,0 +1,57 @@
+<div class="modal fade" id="Search-Modal" tabindex="-1" role="dialog"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= form_tag(search_path, method: :get, id: "search-form", class: "form-inline d-flex justify-content-left md-form form-sm active-theme-2 mt-2") do %>
+            <%= text_field_tag :query, params[:query], class: "form-control form-control-sm mr-3", id: "search-input", placeholder: "Search Articles..." %>
+        <% end %>
+        <div id="autocomplete-container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#search-input').on('keyup', function() {
+    var query = $(this).val();
+    if (query.length >= 1) { // You can adjust the minimum length of characters before making a request
+      $.ajax({
+        url: '/autocomplete/posts', // Endpoint to handle autocomplete requests
+        method: 'GET',
+        data: { query: query },
+        success: function(response) {
+          var suggestions = response.suggestions;
+          var autocompleteContainer = $('#autocomplete-container');
+          autocompleteContainer.empty();
+          if (suggestions.length > 0) {
+            suggestions.forEach(function(suggestion) {
+              autocompleteContainer.append('<div class="autocomplete-item">' + suggestion.title + '</div>');
+            });
+            autocompleteContainer.show();
+          } else {
+            autocompleteContainer.hide();
+          }
+        }
+      });
+    } else {
+      $('#autocomplete-container').hide();
+    }
+  });
+
+  // Handle click on autocomplete suggestion
+  $(document).on('click', '.autocomplete-item', function() {
+    var suggestion = $(this).text();
+    $('#search-input').val(suggestion);
+    $('#search-form').submit();
+  });
+
+  // Hide autocomplete container when clicking outside of it
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('#autocomplete-container').length && !$(e.target).is('#search-input')) {
+      $('#autocomplete-container').hide();
+    }
+  });
+});
+</script>

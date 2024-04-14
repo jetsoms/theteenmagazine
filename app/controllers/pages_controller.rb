@@ -250,7 +250,7 @@ class PagesController < ApplicationController
   def search
     if params[:query].present?
       @query = params[:query]
-      @filter = params[:filter]
+      @filter = params[:filter].present? ? params[:filter] : 'posts'
       if @filter.eql? "writers"
         @pagy, @users =
           pagy(

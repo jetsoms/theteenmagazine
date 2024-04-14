@@ -13,7 +13,7 @@
             <% end %>
           </div>
           <div id="autocomplete-container"></div>
-          <div class="skinny_wrapper">
+          <div class="m-1">
             <% if @query.present? %>
               <h2>Searching for... <span style="background-color: yellow"><%= @query %></span></h2>
               <br>
@@ -26,7 +26,7 @@
                   <%=link_to(post) do %>
                     <div class="w-100 position-relative">
                       <% if post.rank.present? && post.rank <= 1 %>
-                          <span class="badge badge-pink" style="position: absolute; z-index: 10000; top: 5px; left: 5px;">trending in <%= post.category.name %> 🔥</span>
+                          <span class="badge badge-pink" style="position: absolute; z-index: 800; top: 5px; left: 5px;">trending in <%= post.category.name %> 🔥</span>
                       <% end %>
                       <%= render 'posts/partials/header_image', post: post, img_class: "image_thumbnail" %>
                     </div>
