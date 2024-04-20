@@ -2,7 +2,7 @@
   <% if @most_recent_review.status == "Ready for Review" %>
     <% @banner_color = "#61BD4F" %>
   <% elsif @most_recent_review.status == "In Review" || @most_recent_review.status == "Request Re-Review" || @most_recent_review.status == "Recommend for Publishing" || @most_recent_review.status == "In Review By Second Editor" %>
-    <% @banner_color = "yellow" %>
+    <% @banner_color = "#fb3" %>
   <% elsif @most_recent_review.status == "Rejected" %>
     <% @banner_color = "#EB5946" %>
     <% @message = "Changes Requested" %>
